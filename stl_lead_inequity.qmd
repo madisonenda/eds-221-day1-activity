@@ -1,0 +1,45 @@
+---
+title: "stl_lead_inequity"
+author: "Maddy Enda"
+format: html
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+#Loading Packages
+```{r}
+library(tidyverse)
+library(janitor)
+```
+
+#Bringing in data
+```{r}
+stl_lead <- read_csv( here:: here("data","stl_blood_lead.csv"))
+```
+
+#Clean the data 
+```{r}
+stl_lead <- stl_lead %>% janitor::clean_names()
+```
+
+
+#Creating a new dataframe
+
+```{r}
+prop_white <- (stl_lead$white / stl_lead$total_pop) * 100
+
+stl_lead$prop_white <- prop_white
+```
+
+#Graphing data from stl_blood_lead
+
+```{r}
+stl_lead_plot <-ggplot(stl_lead, 
+                       aes( x= pct_elevated, 
+                            y= prop_white)) + geom_point(aes(size= 4, color= pct_elevated),  show.legend= FALSE) + theme_minimal() + scale_color_gradient(low= "pink", high= "darkred") + labs( title= "Population Demographic and Elevated Lead in Blood", x= "% elevated blood lead content", y= "percent of population identifying as white")
+
+stl_lead_plot
+
+```
+#As the proportion of the population that identifies as white increases, the average elevated blood lead levels of children in the population decreases
